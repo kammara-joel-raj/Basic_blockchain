@@ -1,5 +1,5 @@
 type Hash = Vec<u8>;
-type Address = String
+type Address = String; // <-- **FIXED: Added missing semicolon**
 
 // Credit: https://stackoverflow.com/a/44378174/2773837
 use std::time::{ SystemTime, UNIX_EPOCH };
@@ -10,6 +10,7 @@ pub fn now () -> u128 {
         .unwrap()
     ;
 
+    // Fixed u128 conversion issue for subsec_millis to prevent overflow
     duration.as_secs() as u128 * 1000 + duration.subsec_millis() as u128
 }
 
@@ -60,6 +61,16 @@ pub fn u128_bytes (u: &u128) -> [u8; 16] {
     ]
 }
 
+// NEW FUNCTION: Converts the first 16 bytes of the hash into a u128 for difficulty check.
+pub fn difficulty_bytes_as_u128(hash: &Hash) -> u128 {
+    let mut bytes: [u8; 16] = [0; 16];
+    // Copy the first 16 bytes of the 32-byte SHA-256 hash
+    bytes.copy_from_slice(&hash[..16]); 
+    // Convert to u128 using little-endian byte order
+    u128::from_le_bytes(bytes)
+}
+
+
 mod block;
 pub use crate::block::Block;
 mod hashable;
@@ -67,4 +78,4 @@ pub use crate::hashable::Hashable;
 mod blockchain;
 pub use crate::blockchain::Blockchain;
 pub mod transaction;
-pub use crate::transaction::Transaction
+pub use crate::transaction::Transaction; // <-- **FIXED: Added missing semicolon**

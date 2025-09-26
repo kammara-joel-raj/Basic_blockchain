@@ -31,7 +31,7 @@ impl Blockchain {
 
         if block.index != i as u32 {
             return Err(BlockValidationErr::MismatchedIndex);
-        } else if !block::check_difficulty(&block.hash(), block.difficulty) {
+        } else if !block::check_diffulty(&block.hash(), block.difficulty) { // FIX: check_difficulty -> check_diffulty
             return Err(BlockValidationErr::InvalidHash);
         } else if i != 0 {
             // Not genesis block
